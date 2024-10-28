@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bc619b90-6f7c-44ec-b684-3af149d5de62" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="raise-errorFlow" doc:id="6d3a1123-4078-4a18-8557-01eaeb48e4c4" >
+		<http:listener doc:name="Listener" doc:id="7c2b5df3-a1b3-432c-8457-ae5839ad6526" config-ref="HTTP_Listener_config" path="/raise"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="5dd43d2c-0289-463c-968d-8becb87b5923" />
+		<choice doc:name="Choice" doc:id="68a33773-f74d-4642-9c9c-78a5b47774c5" >
+			<when expression='#[payload != "apple"]'>
+				<raise-error doc:name="Raise error" doc:id="3d45b977-dbd0-47ca-aaa4-8af5177434e7" type="FRUIT:NOT_APPLE" description="Fruit is not apple."/>
+			</when>
+			<otherwise >
+				<set-payload value='#["It is an Apple."]' doc:name="Set Payload" doc:id="33e84b5f-6c5c-4953-812f-c78dc56bd0ca" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
